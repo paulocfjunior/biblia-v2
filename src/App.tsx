@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import Control from './pages/Control'
+import Verse from './pages/Verse'
+import Menu from './pages/Menu'
+import { StateProvider as BooksProvider } from './contexts/books'
+import { createGlobalStyle } from 'styled-components'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: NunitoSans;
+    src: url("/fonts/Nunito_Sans/NunitoSans-Regular.ttf");
+  }
+`
 
-export default App;
+const PageLoader: React.FC = () => <div>Loading</div>
+
+const NotFound: React.FC = () => <div>Esta página não foi encontrada</div>
+
+const Routes: React.FC = () => (
+  <React.Suspense fallback={<PageLoader />}>
+    <Switch>
+      <Route path="/control" component={Control} />
+      <Route path="/verse" component={Verse} />
+      <Route exact path="/" component={Menu} />
+      <Route>
+        <NotFound />
+      </Route>
+    </Switch>
+  </React.Suspense>
+)
+
+const App: React.FC = () => (
+  <BooksProvider>
+    <>
+      <GlobalStyle />
+      <Router>
+        <Routes />
+      </Router>
+    </>
+  </BooksProvider>
+)
+
+export default App
