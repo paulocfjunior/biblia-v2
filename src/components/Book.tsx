@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { store as BookContext } from '../contexts/books'
 import { ReferencePartType } from '../hooks/useParseRef'
 import { useVerses } from '../hooks/useVerse'
+import { VerseProps } from '../pages/Verse'
 
 const StyledBook = styled.button`
   text-align: left;
@@ -36,9 +37,10 @@ type BookProps = {
   bookName: string
   version: string
   verseRef: ReferencePartType
+  onChange: (verse: VerseProps) => void
 }
 
-export const Book: React.FC<BookProps> = ({ bookName, version, verseRef }) => {
+export const Book: React.FC<BookProps> = ({ bookName, version, verseRef, onChange }) => {
   const { state: books } = useContext(BookContext)
   const { chapter, verses } = useVerses(verseRef, bookName, version)
 
@@ -46,11 +48,14 @@ export const Book: React.FC<BookProps> = ({ bookName, version, verseRef }) => {
     return null
   }
 
+  const book = books ? books[bookName] : bookName.replace('.json', '')
+
   return (
-    <StyledBook>
-      {books && <BookName>{books[bookName]}</BookName>}
+    <StyledBook onClick={(): void => onChange({ book, chapter, verses })}>
+      <BookName>
+        {book} <strong>{chapter}</strong>
+      </BookName>
       <div>
-        <strong>{chapter}</strong>-
         {verses &&
           Object.entries(verses)?.map(([number, text]) => (
             <StyledVerse key={number}>

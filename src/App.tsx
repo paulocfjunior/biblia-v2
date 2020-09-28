@@ -1,8 +1,7 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import Control from './pages/Control'
 import Verse from './pages/Verse'
-import Menu from './pages/Menu'
 import { StateProvider as BooksProvider } from './contexts/books'
 import { createGlobalStyle } from 'styled-components'
 
@@ -10,6 +9,17 @@ const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: NunitoSans;
     src: url("/fonts/Nunito_Sans/NunitoSans-Regular.ttf");
+  }
+
+  @font-face {
+    font-family: NunitoSans;
+    font-weight: bold;
+    src: url("/fonts/Nunito_Sans/NunitoSans-Bold.ttf");
+  }
+
+  @font-face {
+    font-family: Lora;
+    src: url("/fonts/Lora/Lora-Regular.ttf");
   }
 `
 
@@ -22,7 +32,7 @@ const Routes: React.FC = () => (
     <Switch>
       <Route path="/control" component={Control} />
       <Route path="/verse" component={Verse} />
-      <Route exact path="/" component={Menu} />
+      <Redirect exact from="/" to="/control" />
       <Route>
         <NotFound />
       </Route>
